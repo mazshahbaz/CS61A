@@ -21,9 +21,22 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    dice_sum = 0
+    dice_roll = 1
+    pig_out = False
+    while dice_roll <= num_rolls:
+        roll=dice()
+        print('Roll', str(dice_roll), 'is:' , roll)
+        if roll ==1: pig_out=True
+        dice_sum += roll
+        dice_roll +=1
+    if pig_out: dice_sum = 1; print('Pig-Out has been Triggered!')
+    print('Points for this role is:', dice_sum)
+    return dice_sum      
     # END PROBLEM 1
 
+#Test roll_dice
+#roll_dice(3)
 
 def free_bacon(score):
     """Return the points scored from rolling 0 dice (Free Bacon).
@@ -32,9 +45,15 @@ def free_bacon(score):
     """
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    tens=score//10
+    ones=score%10
+    score = min(tens,ones)
+    print('Free-Bacon initiated! Points for Free-Bacon is:', score)
+    return score
     # END PROBLEM 2
-
+    
+#Test free_bacon
+#print(free_bacon(32))
 
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free Bacon).
@@ -50,8 +69,14 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        score=free_bacon(opponent_score)
+    else:
+        score=roll_dice(num_rolls,dice)
+    return score
     # END PROBLEM 3
+# Test take turn
+take_turn(8,67)
 
 
 def is_swap(player_score, opponent_score):
@@ -59,9 +84,16 @@ def is_swap(player_score, opponent_score):
     Return whether the two scores should be swapped
     """
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    player_ones = player_score % 10
+    player_tens = player_score // 10
+    opponent_ones = opponent_score % 10
+    opponent_tens = opponent_score // 10
+    if player_ones==opponent_ones or player_tens==opponent_tens:
+        return True
+    return False
     # END PROBLEM 4
-
+#test is_swap
+print(is_swap (78,77))
 
 def other(player):
     """Return the other player, for a player PLAYER numbered 0 or 1.
@@ -96,9 +128,41 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     goal:       The game ends and someone wins when this score is reached.
     say:        The commentary function to call at the end of the first turn.
     """
+    print('Begin Game of Hog!')
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    while score0 < goal and score1 < goal:
+        if player == 0:
+            print('Player 0  takes a turn ------')
+            strat = strategy0
+            score = score0
+            opponent_score=score1
+        else: 
+            print('Player 1  takes a turn ------')
+            strat=strategy1
+            score = score1
+            opponent_score=score0
+        
+        score += take_turn(strat,opponent_score,dice)
+        if is_swap(score,opponent_score):
+            print('Score Swap initiated!!!')
+            score,opponent_score = opponent_score,score
+        
+        if player ==0:
+            print('current scores are: Player0=',score,'  Player1=',opponent_score, '\n')
+            score0=score
+            score1=opponent_score
+        else:
+            print('current scores are: Player0=',opponent_score,'  Player1=',score, '\n')
+            score0=opponent_score
+            score1=score
+        player = other(player)
+    
+    if score0>=100:
+        return print('Player 0 wins!')
+    else:
+        return print('Player 1 wins!')
+        
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
@@ -106,7 +170,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     # END PROBLEM 6
     return score0, score1
 
-
+play(3,4)
 #######################
 # Phase 2: Commentary #
 #######################
