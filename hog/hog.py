@@ -131,6 +131,8 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     print('Begin Game of Hog!')
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
+    highest0=announce_highest(0)
+    highest1=announce_highest(1)
     while score0 < goal and score1 < goal:
         if player == 0:
             print('Player 0  takes a turn ------')
@@ -149,19 +151,24 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
             score,opponent_score = opponent_score,score
         
         if player ==0:
-            print('current scores are: Player0=',score,'  Player1=',opponent_score, '\n')
             score0=score
             score1=opponent_score
         else:
-            print('current scores are: Player0=',opponent_score,'  Player1=',score, '\n')
             score0=opponent_score
             score1=score
+        
+        leader=announce_lead_changes()
+        commentary=both(say_scores,leader)
+        commentary(score0,score1)
+        
+        highest0=highest0(score0)
+        highest1=highest1(score1)
+        print('')
         player = other(player)
-    
-    if score0>=100:
-        return print('Player 0 wins!')
-    else:
-        return print('Player 1 wins!')
+#    if score0>=100:
+#        return print('Player 0 wins!')
+#    else:
+#        return print('Player 1 wins!')
         
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
@@ -204,6 +211,7 @@ def announce_lead_changes(previous_leader=None):
         if leader != None and leader != previous_leader:
             print('Player', leader, 'takes the lead by', abs(score0 - score1))
         return announce_lead_changes(leader)
+
     return say
 
 def both(f, g):
@@ -252,7 +260,18 @@ def announce_highest(who, previous_high=0, previous_score=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    def say(new_score):
+        new_high=new_score-previous_score
+#        print('player:', who)
+#        print('new_score:',new_score)
+#        print('previous_high:', previous_high)
+#        print('new_high:', new_high)
+        if new_high > previous_high:
+            print(new_score-previous_score, "point(s)! That's the biggest gain yet for Player", who)
+            return announce_highest(who,new_high,new_score)
+        else:
+            return announce_highest(who,previous_high,new_score)
+    return say
     # END PROBLEM 7
 
 
@@ -291,7 +310,12 @@ def make_averaged(fn, num_samples=1000):
     3.0
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def average_value(*args):  # *args is the formal parameter of function fn as well
+        total, i = 0, 0
+        while i < num_samples:
+            total, i = total + fn(*args), i + 1
+        return total / num_samples
+    return average_value
     # END PROBLEM 8
 
 
@@ -305,7 +329,15 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     1
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    n, max_score = 1, 0
+    while n <= 10:
+        avg = make_averaged(roll_dice, num_samples)
+        new_score=avg(n, dice)
+        if new_score > max_score:
+            max_score = new_score
+            best_dice = n
+        n += 1
+    return best_dice
     # END PROBLEM 9
 
 
