@@ -70,10 +70,10 @@ def enumerate(s, start=0):
     [[5, 'f'], [6, 'i'], [7, 'v'], [8, 'e']]
     """
     # BEGIN Question 0
-    return [zip(range(start,len(s), s))]
+    return zip(range(start,len(s)), s)
     # END Question 0
 
-#print(enumerate([6, 1, 'a']))  
+print(enumerate([6, 1, 'a']))  
     
 
 def distance(pos1, pos2):
@@ -94,4 +94,8 @@ def mean(s):
     """
     # BEGIN Question 1
     "*** YOUR CODE HERE ***"
+    assert len(s) > 0, "Input sequence emust have more than one item"
+    return (min(s)+max(s))/2
     # END Question 1
+    
+print(mean([]))
