@@ -111,10 +111,10 @@ def k_means(restaurants, k, max_updates=100):
         print(centroids)
         # END Question 6
         n += 1
-    return draw_map(centroids, restaurants)
+    return centroids
 
 
-k_means(restaurants,2)
+print(k_means(restaurants,2))
 
 #
 #################################
