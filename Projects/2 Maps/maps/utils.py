@@ -82,6 +82,8 @@ def distance(pos1, pos2):
     >>> distance([1, 2], [4, 6])
     5.0
     """
+    print("pos1 is: ", pos1)
+    print("pos2 is: ", pos2)
     return sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2)
 
 def mean(s):
@@ -95,7 +97,7 @@ def mean(s):
     # BEGIN Question 1
     "*** YOUR CODE HERE ***"
     assert len(s) > 0, "Input sequence emust have more than one item"
-    return (min(s)+max(s))/2
+    return sum(s)/len(s)
     # END Question 1
     
-print(mean([]))
+#print(mean([]))

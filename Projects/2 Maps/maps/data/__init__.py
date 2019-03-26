@@ -59,7 +59,7 @@ def load_data(user_dataset, review_dataset, restaurant_dataset):
     restaurants = {}
     for busid, restaurant in busid_to_restaurant.items():
         name = restaurant_name(restaurant)
-        location = list(restaurant_location(restaurant))
+        location = restaurant_location(restaurant)
         categories = restaurant_categories(restaurant)
         price = restaurant_price(restaurant)
         restaurant_reviews = busid_to_reviews[busid]

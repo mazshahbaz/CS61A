@@ -6,7 +6,8 @@ import socket
 from abstractions import *
 from utils import distance
 
-def draw_map(centroids, restaurants, ratings):
+#def draw_map(centroids, restaurants, ratings):
+def draw_map(centroids, restaurants):
     """Write a JSON file containing inputs and load a visualization.
 
     Arguments:
@@ -17,10 +18,11 @@ def draw_map(centroids, restaurants, ratings):
     data = []
     locations = set()
     for restaurant in restaurants:
-        p = tuple(restaurant_location(restaurant))
+        p = tuple(restaurant[1])
         cluster = min(enumerate(centroids), key=lambda v: distance(p, v[1]))[0]
-        name = restaurant_name(restaurant)
-        rating = ratings[name]
+        name = restaurant[0]
+#        rating = ratings[name]
+        rating = 1
         if p not in locations:
             data.append({
                 'x': p[0],
